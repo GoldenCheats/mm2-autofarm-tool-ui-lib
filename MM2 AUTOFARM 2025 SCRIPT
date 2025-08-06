@@ -1,7 +1,0 @@
-
-local toggleTabletMode = false
-local toggleRejoinIfLoading = true
-local toggleRejoinOnError = true
-
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/GoldenCheats/mm2-autofarm-tool-ui-lib/refs/heads/main/MM2%20AUTOFARM%202025"))()
