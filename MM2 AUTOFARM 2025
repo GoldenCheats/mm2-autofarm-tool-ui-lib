@@ -1,7 +1,5 @@
 -- ==== CONFIG SECTION ====
-local toggleTabletMode = 
-local toggleRejoinIfLoading = 
-local toggleRejoinOnError = 
+
 -- =========================
 
 
