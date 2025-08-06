@@ -1,8 +1,9 @@
 -- ==== CONFIG SECTION (uses _G variables) ====
-local toggleTabletMode = (_G.toggleTabletMode ~= nil and _G.toggleTabletMode) or false
-local toggleRejoinIfLoading = (_G.toggleRejoinIfLoading ~= nil and _G.toggleRejoinIfLoading) or true
-local toggleRejoinOnError = (_G.toggleRejoinOnError ~= nil and _G.toggleRejoinOnError) or true
+local toggleTabletMode = (_G.toggleTabletMode ~= nil) and _G.toggleTabletMode or false
+local toggleRejoinIfLoading = (_G.toggleRejoinIfLoading ~= nil) and _G.toggleRejoinIfLoading or false
+local toggleRejoinOnError = (_G.toggleRejoinOnError ~= nil) and _G.toggleRejoinOnError or false
 -- ===========================================
+
 
 
 -- Load the UI library
