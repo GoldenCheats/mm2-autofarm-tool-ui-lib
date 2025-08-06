@@ -78,7 +78,7 @@ end)
 
 -- Alt Rejoin Toggle
 local altRejoinEnabled = toggleRejoinIfLoading
-HomePage.AddToggle("Rejoin if loading GUI stuck (alt)", toggleRejoinIfLoading, function(value)
+HomePage.AddToggle("Rejoin if loading GUI stuck on loading", toggleRejoinIfLoading, function(value)
     altRejoinEnabled = value
 end)
 
@@ -107,7 +107,7 @@ task.spawn(function()
             end
         end)
 
-        task.delay(30, function()
+        task.delay(60, function()
             if altRejoinEnabled and not loadingRemoved then
                 warn("Loading GUI still present. Rejoining...")
                 rejoin()
