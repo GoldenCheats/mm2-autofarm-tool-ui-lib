@@ -1,0 +1,5 @@
+_G.toggleTabletMode = false            ---------auto selects tablet mode in emulators
+_G.toggleRejoinIfLoading = false                  --------rejoins if game doesnt load in time
+_G.toggleRejoinOnError = true                     -------------------rejoin if kicked
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/GoldenCheats/mm2-autofarm-tool-ui-lib/refs/heads/main/MM2%20FARM%20TOOL"))()
