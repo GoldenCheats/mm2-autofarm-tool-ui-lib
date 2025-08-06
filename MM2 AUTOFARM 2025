@@ -6,7 +6,7 @@ local toggleRejoinOnError = true
 
 
 -- Load the UI library
-local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/twink"))()
+local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/GoldenCheats/mm2-autofarm-tool-ui-lib/refs/heads/main/ui%20lib"))()
 
 -- Try to detect executor name
 local executor = "Unknown"
