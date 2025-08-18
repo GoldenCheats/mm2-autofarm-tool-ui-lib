@@ -24,12 +24,178 @@ local MainUI = UILibrary.Load("MM2 Farming Tool - " .. executor)
 local MainPage = MainUI.AddPage("Main")
 local HomePage = MainUI.AddPage("Settings")
 
-MainPage.AddLabel("Safe autofarm ~ Fling murder once done ~ Auto reloads if kicked~")
+MainPage.AddLabel("MM2 Scripts No Key")
 
-MainPage.AddButton("Highlight Hub (Key system)", function()
+MainPage.AddButton("Highlight Hub", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/ThatSick/HighlightMM2/main/Main"))()
 end)
 
+MainPage.AddButton("Eclipse Hub", function()
+-- Custom Executor GUI with Single Theme Button, Warning, and Close Button
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Theme setup
+local themes = {
+    Color3.fromRGB(0, 170, 255), -- Blue
+    Color3.fromRGB(0, 200, 100), -- Green
+    Color3.fromRGB(200, 0, 0),   -- Red
+    Color3.fromRGB(170, 0, 255)  -- Purple
+}
+local currentThemeIndex = 1
+local themeColor = themes[currentThemeIndex]
+
+-- ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CustomExecutor"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 400, 0, 250)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = themeColor
+title.Text = "Eclipse Hub bypass"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 20
+title.Parent = mainFrame
+
+-- Close Button
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -35, 0, 0)
+closeButton.BackgroundTransparency = 1
+closeButton.Text = "✖"
+closeButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.TextSize = 20
+closeButton.Parent = mainFrame
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+-- Theme Button (next to X)
+local themeButton = Instance.new("TextButton")
+themeButton.Size = UDim2.new(0, 70, 0, 25)
+themeButton.Position = UDim2.new(1, -110, 0, 2)
+themeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+themeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+themeButton.Font = Enum.Font.SourceSansBold
+themeButton.TextSize = 14
+themeButton.Text = "Theme"
+themeButton.Parent = mainFrame
+
+themeButton.MouseButton1Click:Connect(function()
+    currentThemeIndex = currentThemeIndex + 1
+    if currentThemeIndex > #themes then currentThemeIndex = 1 end
+    themeColor = themes[currentThemeIndex]
+    title.BackgroundColor3 = themeColor
+end)
+
+-- Warning Label
+local warningLabel = Instance.new("TextLabel")
+warningLabel.Size = UDim2.new(1, -20, 0, 25)
+warningLabel.Position = UDim2.new(0, 10, 0, 35)
+warningLabel.BackgroundTransparency = 1
+warningLabel.Text = "⚠ Press 'Paste Eclipse' then 'Execute' to run the script!"
+warningLabel.TextColor3 = Color3.fromRGB(255, 85, 0)
+warningLabel.Font = Enum.Font.SourceSansBold
+warningLabel.TextSize = 14
+warningLabel.TextWrapped = true
+warningLabel.TextXAlignment = Enum.TextXAlignment.Left
+warningLabel.Parent = mainFrame
+
+-- Script Box
+local scriptBox = Instance.new("TextBox")
+scriptBox.MultiLine = true
+scriptBox.Size = UDim2.new(1, -20, 0, 150)
+scriptBox.Position = UDim2.new(0, 10, 0, 60)
+scriptBox.ClearTextOnFocus = false
+scriptBox.TextWrapped = true
+scriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+scriptBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+scriptBox.Text = "-- Your script will appear here"
+scriptBox.Parent = mainFrame
+
+-- Execute Button
+local execButton = Instance.new("TextButton")
+execButton.Size = UDim2.new(1, -20, 0, 40)
+execButton.Position = UDim2.new(0, 10, 1, -50)
+execButton.BackgroundColor3 = themeColor
+execButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+execButton.Font = Enum.Font.SourceSansBold
+execButton.TextSize = 20
+execButton.Text = "Execute"
+execButton.Parent = mainFrame
+
+execButton.MouseButton1Click:Connect(function()
+    local code = scriptBox.Text
+    loadstring(code)()
+end)
+
+-- Paste Eclipse Hub Button
+local pasteButton = Instance.new("TextButton")
+pasteButton.Size = UDim2.new(1, -20, 0, 40)
+pasteButton.Position = UDim2.new(0, 10, 1, -100)
+pasteButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+pasteButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+pasteButton.Font = Enum.Font.SourceSansBold
+pasteButton.TextSize = 18
+pasteButton.Text = "Paste Eclipse Hub"
+pasteButton.Parent = mainFrame
+
+pasteButton.MouseButton1Click:Connect(function()
+    scriptBox.Text = [[
+getgenv().mainKey = "nil"
+
+local a,b,c,d,e=loadstring,request or http_request or (http and http.request) or (syn and syn.request),assert,tostring,"https\58//api.eclipsehub.xyz/auth"
+c(a and b,"Executor not Supported")
+a(b({Url=e.."?key="..d(mainKey),Headers={["User-Agent"]="Eclipse"}}).Body)()
+    ]]
+end)
+
+end)
+
+
+
+
+MainPage.AddButton("Best Godmode Autofarm (enable second life)", function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/littl3prince/Moon/main/Moon_V1"))()
+end)
+
+MainPage.AddButton("Godmode Autofarm 2", function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/hoodratleahh/Summer-UPD/refs/heads/main/Initializer.lua"))()
+end)
+
+
+MainPage.AddButton("Vertex Autofarm", function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/m00ndiety/Moondiety/refs/heads/main/Loader'))()
+
+end)
+
+
+MainPage.AddButton("Mid Autofarm", function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/m00ndiety/Moondiety/refs/heads/main/Loader'))()
+
+end)
+
+
+
+MainPage.AddButton("Mid Autofarm (not perfect)", function()
+loadstring(game:HttpGet("https://globalexp.xyz/"))()
+end)
 
 -- === SETTINGS PAGE ===
 HomePage.AddLabel("Safety Features")
