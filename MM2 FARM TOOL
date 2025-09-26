@@ -1,8 +1,10 @@
 -- ==== CONFIG SECTION (uses _G variables) ====
-local toggleTabletMode = (_G.toggleTabletMode ~= nil) and _G.toggleTabletMode or false
-local toggleRejoinIfLoading = (_G.toggleRejoinIfLoading ~= nil) and _G.toggleRejoinIfLoading or false
-local toggleRejoinOnError = (_G.toggleRejoinOnError ~= nil) and _G.toggleRejoinOnError or false
+local toggleTabletMode       = (_G.toggleTabletMode ~= nil) and _G.toggleTabletMode or false
+local togglePhoneMode        = (_G.togglePhoneMode ~= nil) and _G.togglePhoneMode or false
+local toggleRejoinIfLoading  = (_G.toggleRejoinIfLoading ~= nil) and _G.toggleRejoinIfLoading or false
+local toggleRejoinOnError    = (_G.toggleRejoinOnError ~= nil) and _G.toggleRejoinOnError or false
 -- ===========================================
+
 
 
 -- Load the UI library
@@ -200,6 +202,47 @@ end)
 -- === SETTINGS PAGE ===
 HomePage.AddLabel("Safety Features")
 HomePage.AddLabel("PUT THIS SCRIPT IN YOUR AUTO EXECUTE TO STAY SAFE.")
+
+-- Phone Toggle
+local autoPhoneEnabled = togglePhoneMode
+HomePage.AddToggle("Auto Select Phone Mode", togglePhoneMode, function(value)
+    autoPhoneEnabled = value
+end)
+
+task.spawn(function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+
+    local function log(msg)
+        print("[PhoneAutoSelect] " .. msg)
+    end
+
+    while true do
+        if autoPhoneEnabled then
+            local deviceSelect = playerGui:FindFirstChild("DeviceSelect")
+            if deviceSelect and deviceSelect.Enabled then
+                local container = deviceSelect:FindFirstChild("Container")
+                local phone = container and container:FindFirstChild("Phone")
+                local button = phone and phone:FindFirstChild("Button")
+
+                if button and (button:IsA("TextButton") or button:IsA("ImageButton")) then
+                    if button.Visible then
+                        log("Firing Phone button click event.")
+                        firesignal(button.MouseButton1Click)
+                    else
+                        log("Phone button found but not visible yet.")
+                    end
+                else
+                    log("Phone.Button not found or not a button.")
+                end
+            end
+        end
+        task.wait(0.2)
+    end
+end)
+
+
 
 
 -- Tablet Toggle
