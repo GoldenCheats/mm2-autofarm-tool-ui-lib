@@ -5,10 +5,35 @@ local toggleRejoinIfLoading  = (_G.toggleRejoinIfLoading ~= nil) and _G.toggleRe
 local toggleRejoinOnError    = (_G.toggleRejoinOnError ~= nil) and _G.toggleRejoinOnError or false
 -- ===========================================
 
+if not game:IsLoaded() then game.Loaded:Wait() end
 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TeleportService = game:GetService("TeleportService")
+local GuiService = game:GetService("GuiService")
+local Stats = game:GetService("Stats")
 
--- Load the UI library
-local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/GoldenCheats/mm2-autofarm-tool-ui-lib/refs/heads/main/ui%20lib"))()
+local LocalPlayer = Players.LocalPlayer
+
+-- ==================== ADVANCED THEME SYSTEM ====================
+local StartupTheme = {
+    MainBG = Color3.fromRGB(30, 30, 30),
+    MenuBarBG = Color3.fromRGB(26, 26, 27), 
+    DisplayBG = Color3.fromRGB(20, 20, 20),
+    TitleBarBG = Color3.fromRGB(40, 40, 40),
+    ActiveTab = Color3.fromRGB(50, 50, 50),
+    InactiveTab = Color3.fromRGB(40, 40, 40),
+    ElementBG = Color3.fromRGB(35, 35, 35),
+    TextColor = Color3.fromRGB(255, 255, 255),
+    ToggleTrue = Color3.fromRGB(0, 255, 109),
+    SliderFill = Color3.fromRGB(70, 70, 70),
+    GlowColor = Color3.fromRGB(0, 0, 0)
+}
+
+-- ==================== LOAD UI LIBRARY ====================
+local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/GoldenCheats/twink-ui-lib/refs/heads/main/ui%20lib%20source"))() 
 
 -- Try to detect executor name
 local executor = "Unknown"
@@ -21,186 +46,211 @@ if identifyexecutor then
     end
 end
 
--- Apply executor name to UI title
-local MainUI = UILibrary.Load("MM2 Farming Tool - " .. executor)
+local MainUI = UILibrary.Load("MM2 Farming Tool - " .. executor, StartupTheme)
+
+-- ==================== UI PAGES ====================
 local MainPage = MainUI.AddPage("Main")
+local CombatPage = MainUI.AddPage("Combat")
+local MiscPage = MainUI.AddPage("MISC")
 local HomePage = MainUI.AddPage("Settings")
+local ThemePage = MainUI.AddPage("Themes")
 
-MainPage.AddLabel("MM2 Scripts No Key")
+-- ==================== MAIN PAGE SCRIPTS ====================
+MainPage.AddLabel("USE AN ALT!- THEY MAY ALWYAS BE STEALERS!")
 
-MainPage.AddButton("Highlight Hub", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/ThatSick/HighlightMM2/main/Main"))()
+MainPage.AddButton("Honey (BEST SCRIPT)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ThatSick/HoneyLua/refs/heads/main/Loader.luau"))()
 end)
 
 MainPage.AddButton("Eclipse Hub", function()
--- Custom Executor GUI with Single Theme Button, Warning, and Close Button
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
--- Theme setup
-local themes = {
-    Color3.fromRGB(0, 170, 255), -- Blue
-    Color3.fromRGB(0, 200, 100), -- Green
-    Color3.fromRGB(200, 0, 0),   -- Red
-    Color3.fromRGB(170, 0, 255)  -- Purple
-}
-local currentThemeIndex = 1
-local themeColor = themes[currentThemeIndex]
-
--- ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "CustomExecutor"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = playerGui
-
--- Main Frame
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 400, 0, 250)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
-mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-mainFrame.BorderSizePixel = 0
-mainFrame.Parent = screenGui
-
--- Title
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 30)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.BackgroundColor3 = themeColor
-title.Text = "Eclipse Hub bypass"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.SourceSansBold
-title.TextSize = 20
-title.Parent = mainFrame
-
--- Close Button
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -35, 0, 0)
-closeButton.BackgroundTransparency = 1
-closeButton.Text = "✖"
-closeButton.TextColor3 = Color3.fromRGB(255, 0, 0)
-closeButton.Font = Enum.Font.SourceSansBold
-closeButton.TextSize = 20
-closeButton.Parent = mainFrame
-
-closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
+    -- Insert Eclipse Hub loadstring here if needed
 end)
 
--- Theme Button (next to X)
-local themeButton = Instance.new("TextButton")
-themeButton.Size = UDim2.new(0, 70, 0, 25)
-themeButton.Position = UDim2.new(1, -110, 0, 2)
-themeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-themeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-themeButton.Font = Enum.Font.SourceSansBold
-themeButton.TextSize = 14
-themeButton.Text = "Theme"
-themeButton.Parent = mainFrame
-
-themeButton.MouseButton1Click:Connect(function()
-    currentThemeIndex = currentThemeIndex + 1
-    if currentThemeIndex > #themes then currentThemeIndex = 1 end
-    themeColor = themes[currentThemeIndex]
-    title.BackgroundColor3 = themeColor
+MainPage.AddButton("Autofarm 1", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/littl3prince/Moon/main/Moon_V1"))()
 end)
 
--- Warning Label
-local warningLabel = Instance.new("TextLabel")
-warningLabel.Size = UDim2.new(1, -20, 0, 25)
-warningLabel.Position = UDim2.new(0, 10, 0, 35)
-warningLabel.BackgroundTransparency = 1
-warningLabel.Text = "⚠ Press 'Paste Eclipse' then 'Execute' to run the script!"
-warningLabel.TextColor3 = Color3.fromRGB(255, 85, 0)
-warningLabel.Font = Enum.Font.SourceSansBold
-warningLabel.TextSize = 14
-warningLabel.TextWrapped = true
-warningLabel.TextXAlignment = Enum.TextXAlignment.Left
-warningLabel.Parent = mainFrame
-
--- Script Box
-local scriptBox = Instance.new("TextBox")
-scriptBox.MultiLine = true
-scriptBox.Size = UDim2.new(1, -20, 0, 150)
-scriptBox.Position = UDim2.new(0, 10, 0, 60)
-scriptBox.ClearTextOnFocus = false
-scriptBox.TextWrapped = true
-scriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-scriptBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-scriptBox.Text = "-- Your script will appear here"
-scriptBox.Parent = mainFrame
-
--- Execute Button
-local execButton = Instance.new("TextButton")
-execButton.Size = UDim2.new(1, -20, 0, 40)
-execButton.Position = UDim2.new(0, 10, 1, -50)
-execButton.BackgroundColor3 = themeColor
-execButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-execButton.Font = Enum.Font.SourceSansBold
-execButton.TextSize = 20
-execButton.Text = "Execute"
-execButton.Parent = mainFrame
-
-execButton.MouseButton1Click:Connect(function()
-    local code = scriptBox.Text
-    loadstring(code)()
+MainPage.AddButton("Autofarm 2", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/hoodratleahh/Summer-UPD/refs/heads/main/Initializer.lua"))()
 end)
 
--- Paste Eclipse Hub Button
-local pasteButton = Instance.new("TextButton")
-pasteButton.Size = UDim2.new(1, -20, 0, 40)
-pasteButton.Position = UDim2.new(0, 10, 1, -100)
-pasteButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
-pasteButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-pasteButton.Font = Enum.Font.SourceSansBold
-pasteButton.TextSize = 18
-pasteButton.Text = "Paste Eclipse Hub"
-pasteButton.Parent = mainFrame
-
-pasteButton.MouseButton1Click:Connect(function()
-    scriptBox.Text = [[
-getgenv().mainKey = "nil"
-
-local a,b,c,d,e=loadstring,request or http_request or (http and http.request) or (syn and syn.request),assert,tostring,"https\58//api.eclipsehub.xyz/auth"
-c(a and b,"Executor not Supported")
-a(b({Url=e.."?key="..d(mainKey),Headers={["User-Agent"]="Eclipse"}}).Body)()
-    ]]
+MainPage.AddButton("Good For Aimbot (E)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Robloxscriptsnewst/Murder-Mystery-2/refs/heads/main/main.lua"))()
 end)
 
+MainPage.AddButton("Vertex (Not that good LOL)", function()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/62f16349f846392f6b2a112ba6dd49d0.lua"))()
+end)
+
+MainPage.AddButton("Rayz Autofarm + More (Crash Issues)", function()
+    loadstring(game:HttpGet("https://globalexp.xyz/"))()
 end)
 
 
+-- ==================== ADVANCED YARHM COMBAT MODULE ====================
+
+local function getRoles()
+    local success, data = pcall(function()
+        return ReplicatedStorage:FindFirstChild("GetPlayerData", true):InvokeServer()
+    end)
+    return success and data or {}
+end
+
+local function findMurderer()
+    local data = getRoles()
+    for name, pData in pairs(data) do
+        if pData.Role == "Murderer" and not pData.Dead then
+            local target = Players:FindFirstChild(name)
+            if target then return target end
+        end
+    end
+    return nil
+end
+
+local function findSheriff()
+    local data = getRoles()
+    for name, pData in pairs(data) do
+        if (pData.Role == "Sheriff" or pData.Role == "Hero") and not pData.Dead then
+            local target = Players:FindFirstChild(name)
+            if target then return target end
+        end
+    end
+    return nil
+end
+
+-- HIGHEST TIER PREDICTION MATH
+local function getUltimatePrediction(target)
+    local char = target.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return nil end
+
+    local hrp = char.HumanoidRootPart
+    local velocity = hrp.AssemblyLinearVelocity
+    local position = hrp.Position
+
+    -- Get real-time ping accurately
+    local ping = 0.05
+    pcall(function()
+        ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
+    end)
+
+    -- By offsetting the origin to right above their head, distance is ~4 studs.
+    -- Time-to-impact (TTI) is virtually zero, so we ONLY compensate for Network Ping & Server Tick Delay
+    local serverTickDelay = 0.033
+    local networkDelay = ping + serverTickDelay
+
+    -- Kinematic prediction: Pos = Pos + (Vel * Time)
+    local predictedPos = position + (velocity * networkDelay)
+
+    -- Arc Physics Compensation (If they are jumping or falling)
+    if velocity.Y ~= 0 then
+        -- Subtract gravity pull over the delay time: 0.5 * a * t^2
+        local gravity = workspace.Gravity
+        predictedPos = predictedPos + Vector3.new(0, 0.5 * -gravity * (networkDelay ^ 2), 0)
+    end
+
+    -- Bias to Upper Torso for maximum hitbox volume margin
+    return predictedPos + Vector3.new(0, 1.2, 0)
+end
+
+local function executeShot(target)
+    local gun = LocalPlayer.Character:FindFirstChild("Gun") or LocalPlayer.Backpack:FindFirstChild("Gun")
+    if not gun then return false end
+
+    if not LocalPlayer.Character:FindFirstChild("Gun") then
+        LocalPlayer.Character.Humanoid:EquipTool(gun)
+    end
+
+    local predictedTargetPos = getUltimatePrediction(target)
+    if not predictedTargetPos then return false end
+
+    -- EXPLOIT: We set the bullet's origin immediately next to them (bypassing travel time) and aim directly at the mathematically predicted position.
+    local bulletOrigin = CFrame.new(target.Character.HumanoidRootPart.Position + Vector3.new(0, 4, 0))
+    local hitCFrame = CFrame.new(predictedTargetPos)
+
+    gun.Shoot:FireServer(bulletOrigin, hitCFrame)
+    return true
+end
+
+-- Combat Variables
+local autoShootEnabled = false
+local instakillKey = Enum.KeyCode.F -- Default
+local autoShootKey = Enum.KeyCode.E -- Default requested
 
 
-MainPage.AddButton("Best Godmode Autofarm (enable second life)", function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/littl3prince/Moon/main/Moon_V1"))()
+-- Combat UI
+
+CombatPage.AddButton("Fling V2 Updated! + GRAB GUN", function()
+loadstring(game:HttpGet("https://pastebin.com/raw/cypKxHEd"))()
 end)
 
-MainPage.AddButton("Godmode Autofarm 2", function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/hoodratleahh/Summer-UPD/refs/heads/main/Initializer.lua"))()
+
+CombatPage.AddLabel("==Shoot Section==Not Moving Is better ")
+
+CombatPage.AddButton("INSTAKILL MURDERER", function()
+    if findSheriff() ~= LocalPlayer then
+        print("[Combat] You are not the sheriff!")
+        return
+    end
+    local murd = findMurderer()
+    if murd then 
+        executeShot(murd)
+        print("[Combat] Instakill Executed.")
+    end
 end)
 
-
-MainPage.AddButton("Vertex Autofarm", function()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/m00ndiety/Moondiety/refs/heads/main/Loader'))()
-
-end)
-
-
-MainPage.AddButton("Mid Autofarm", function()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/m00ndiety/Moondiety/refs/heads/main/Loader'))()
-
+CombatPage.AddKeybind("Instakill Keybind", instakillKey, function(newKey)
+    instakillKey = newKey
 end)
 
 
 
-MainPage.AddButton("Mid Autofarm (not perfect)", function()
-loadstring(game:HttpGet("https://globalexp.xyz/"))()
+
+local autoShootUI = CombatPage.AddToggle("Auto Shoot Murderer", false, function(v)
+    autoShootEnabled = v
 end)
 
--- === SETTINGS PAGE ===
-HomePage.AddLabel("Safety Features")
+
+
+-- Keybind Listener
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+
+    if input.KeyCode == instakillKey then
+        if findSheriff() == LocalPlayer then
+            local murd = findMurderer()
+            if murd then executeShot(murd) end
+        end
+    elseif input.KeyCode == autoShootKey then
+        autoShootEnabled = not autoShootEnabled
+        -- If UI library supports setting toggle state visually, you'd call it here.
+        print("[Combat] Auto Shoot is now: " .. tostring(autoShootEnabled))
+    end
+end)
+
+-- Auto Shoot Loop
+RunService.Heartbeat:Connect(function()
+    if not autoShootEnabled then return end
+    if findSheriff() ~= LocalPlayer then return end
+
+    local gun = LocalPlayer.Character:FindFirstChild("Gun")
+    if not gun then return end -- Only auto-shoot if gun is actively equipped in hand
+
+    local murd = findMurderer()
+    if murd then
+        executeShot(murd)
+    end
+end)
+
+MiscPage.AddButton("MAP SELECT", function()
+loadstring(game:HttpGet("https://pastebin.com/raw/PAt16Y6N"))()
+end)
+
+MiscPage.AddButton("ANIMATIONS FIX", function()
+loadstring(game:HttpGet("https://pastebin.com/raw/cypKxHEd"))()
+end)
+
+-- ==================== SETTINGS PAGE (Safety & Utilities) ====================
+HomePage.AddLabel("FARMING NO KICK SAFTEY")
 HomePage.AddLabel("PUT THIS SCRIPT IN YOUR AUTO EXECUTE TO STAY SAFE.")
 
 -- Phone Toggle
@@ -210,14 +260,7 @@ HomePage.AddToggle("Auto Select Phone Mode", togglePhoneMode, function(value)
 end)
 
 task.spawn(function()
-    local Players = game:GetService("Players")
-    local player = Players.LocalPlayer
-    local playerGui = player:WaitForChild("PlayerGui")
-
-    local function log(msg)
-        print("[PhoneAutoSelect] " .. msg)
-    end
-
+    local playerGui = LocalPlayer:WaitForChild("PlayerGui")
     while true do
         if autoPhoneEnabled then
             local deviceSelect = playerGui:FindFirstChild("DeviceSelect")
@@ -226,24 +269,14 @@ task.spawn(function()
                 local phone = container and container:FindFirstChild("Phone")
                 local button = phone and phone:FindFirstChild("Button")
 
-                if button and (button:IsA("TextButton") or button:IsA("ImageButton")) then
-                    if button.Visible then
-                        log("Firing Phone button click event.")
-                        firesignal(button.MouseButton1Click)
-                    else
-                        log("Phone button found but not visible yet.")
-                    end
-                else
-                    log("Phone.Button not found or not a button.")
+                if button and button.Visible and (button:IsA("TextButton") or button:IsA("ImageButton")) then
+                    firesignal(button.MouseButton1Click)
                 end
             end
         end
         task.wait(0.2)
     end
 end)
-
-
-
 
 -- Tablet Toggle
 local autoTabletEnabled = toggleTabletMode
@@ -252,14 +285,7 @@ HomePage.AddToggle("Auto Select Tablet Mode", toggleTabletMode, function(value)
 end)
 
 task.spawn(function()
-    local Players = game:GetService("Players")
-    local player = Players.LocalPlayer
-    local playerGui = player:WaitForChild("PlayerGui")
-
-    local function log(msg)
-        print("[TabletAutoSelect] " .. msg)
-    end
-
+    local playerGui = LocalPlayer:WaitForChild("PlayerGui")
     while true do
         if autoTabletEnabled then
             local deviceSelect = playerGui:FindFirstChild("DeviceSelect")
@@ -268,15 +294,8 @@ task.spawn(function()
                 local tablet = container and container:FindFirstChild("Tablet")
                 local button = tablet and tablet:FindFirstChild("Button")
 
-                if button and (button:IsA("TextButton") or button:IsA("ImageButton")) then
-                    if button.Visible then
-                        log("Firing Tablet button click event.")
-                        firesignal(button.MouseButton1Click)
-                    else
-                        log("Button found but not visible yet.")
-                    end
-                else
-                    log("Tablet.Button not found or not a button.")
+                if button and button.Visible and (button:IsA("TextButton") or button:IsA("ImageButton")) then
+                    firesignal(button.MouseButton1Click)
                 end
             end
         end
@@ -284,49 +303,32 @@ task.spawn(function()
     end
 end)
 
-
 -- Alt Rejoin Toggle
 local altRejoinEnabled = toggleRejoinIfLoading
-HomePage.AddToggle("Rejoin if loading GUI stuck on loading", toggleRejoinIfLoading, function(value)
+HomePage.AddToggle("Rejoin if loading GUI stuck", toggleRejoinIfLoading, function(value)
     altRejoinEnabled = value
 end)
 
 task.spawn(function()
-    local Players = game:GetService("Players")
-    local TeleportService = game:GetService("TeleportService")
-
-    local player = Players.LocalPlayer
-    local playerGui = player:WaitForChild("PlayerGui")
-
-    local function rejoin()
-        local placeId = game.PlaceId
-        local jobId = game.JobId
-        TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
-    end
-
+    local playerGui = LocalPlayer:WaitForChild("PlayerGui")
     local loadingGui = playerGui:WaitForChild("Loading", 10)
 
     if loadingGui then
         local loadingRemoved = false
-
         loadingGui.AncestryChanged:Connect(function()
             if not loadingGui:IsDescendantOf(game) then
                 loadingRemoved = true
-                print("hi")
             end
         end)
 
         task.delay(60, function()
             if altRejoinEnabled and not loadingRemoved then
                 warn("Loading GUI still present. Rejoining...")
-                rejoin()
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
             end
         end)
-    else
-        warn("Loading GUI did not appear at all.")
     end
 end)
-
 
 -- Error Rejoin Toggle
 local errorTeleportEnabled = toggleRejoinOnError
@@ -334,31 +336,64 @@ HomePage.AddToggle("Rejoin on error message", toggleRejoinOnError, function(valu
     errorTeleportEnabled = value
 end)
 
-local GuiService = game:GetService("GuiService")
-local Players = game:GetService("Players")
-local TeleportService = game:GetService("TeleportService")
-local player = Players.LocalPlayer
-
-local function onErrorMessageChanged(errorMessage)
-    if errorTeleportEnabled then
-        if errorMessage and errorMessage ~= "" then
-            print("Error detected: " .. errorMessage)
-            if player then
-                wait()
-                TeleportService:Teleport(game.PlaceId, player)
-            end
+GuiService.ErrorMessageChanged:Connect(function(errorMessage)
+    if errorTeleportEnabled and errorMessage and errorMessage ~= "" then
+        print("Error detected: " .. errorMessage)
+        if LocalPlayer then
+            task.wait()
+            TeleportService:Teleport(game.PlaceId, LocalPlayer)
         end
     end
-end
-
-GuiService.ErrorMessageChanged:Connect(onErrorMessageChanged)
-
+end)
 
 -- Extra Utilities
-HomePage.AddButton("Anti AFK (Incase it don't work on other scripts)", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/Anti-afk/main/antiafkbyhassanxzyn"))();
+HomePage.AddLabel("Extra Utilities")
+HomePage.AddButton("Anti AFK", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/Anti-afk/main/antiafkbyhassanxzyn"))()
 end)
 
 HomePage.AddButton("Server Hop", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/Cesare0328/my-scripts/refs/heads/main/CachedServerhop.lua'))()
 end)
+
+
+-- ==================== THEME PAGE ====================
+ThemePage.AddLabel("Visual Presets")
+
+local Themes = {
+    ["Cherry Noir (Valentines)"] = {
+        MainBG = Color3.fromRGB(40, 15, 20), MenuBarBG = Color3.fromRGB(28, 10, 12), DisplayBG = Color3.fromRGB(28, 10, 12), TitleBarBG = Color3.fromRGB(60, 20, 30), ActiveTab = Color3.fromRGB(220, 40, 70), InactiveTab = Color3.fromRGB(40, 15, 20), ElementBG = Color3.fromRGB(55, 22, 28), TextColor = Color3.fromRGB(255, 200, 215), ToggleTrue = Color3.fromRGB(220, 40, 70), SliderFill = Color3.fromRGB(220, 40, 70), GlowColor = Color3.fromRGB(220, 40, 70) 
+    },
+    ["Emerald Forest"] = {
+        MainBG = Color3.fromRGB(15, 25, 20), MenuBarBG = Color3.fromRGB(10, 18, 15), DisplayBG = Color3.fromRGB(10, 18, 15), TitleBarBG = Color3.fromRGB(20, 45, 35), ActiveTab = Color3.fromRGB(40, 200, 120), InactiveTab = Color3.fromRGB(15, 25, 20), ElementBG = Color3.fromRGB(25, 40, 32), TextColor = Color3.fromRGB(200, 255, 220), ToggleTrue = Color3.fromRGB(40, 200, 120), SliderFill = Color3.fromRGB(40, 200, 120), GlowColor = Color3.fromRGB(40, 200, 120) 
+    },
+    ["Oceanic Abyss"] = {
+        MainBG = Color3.fromRGB(15, 20, 30), MenuBarBG = Color3.fromRGB(10, 12, 20), DisplayBG = Color3.fromRGB(10, 12, 20), TitleBarBG = Color3.fromRGB(20, 35, 60), ActiveTab = Color3.fromRGB(0, 160, 255), InactiveTab = Color3.fromRGB(15, 20, 30), ElementBG = Color3.fromRGB(25, 35, 50), TextColor = Color3.fromRGB(210, 240, 255), ToggleTrue = Color3.fromRGB(0, 160, 255), SliderFill = Color3.fromRGB(0, 160, 255), GlowColor = Color3.fromRGB(0, 160, 255) 
+    },
+    ["Amethyst Dream"] = {
+        MainBG = Color3.fromRGB(25, 15, 35), MenuBarBG = Color3.fromRGB(18, 10, 25), DisplayBG = Color3.fromRGB(18, 10, 25), TitleBarBG = Color3.fromRGB(45, 25, 65), ActiveTab = Color3.fromRGB(180, 100, 255), InactiveTab = Color3.fromRGB(25, 15, 35), ElementBG = Color3.fromRGB(40, 25, 55), TextColor = Color3.fromRGB(240, 220, 255), ToggleTrue = Color3.fromRGB(180, 100, 255), SliderFill = Color3.fromRGB(180, 100, 255), GlowColor = Color3.fromRGB(180, 100, 255) 
+    },
+    ["Amber Sunset"] = {
+        MainBG = Color3.fromRGB(35, 25, 15), MenuBarBG = Color3.fromRGB(25, 18, 10), DisplayBG = Color3.fromRGB(25, 18, 10), TitleBarBG = Color3.fromRGB(65, 45, 25), ActiveTab = Color3.fromRGB(255, 160, 50), InactiveTab = Color3.fromRGB(35, 25, 15), ElementBG = Color3.fromRGB(50, 40, 25), TextColor = Color3.fromRGB(255, 240, 210), ToggleTrue = Color3.fromRGB(255, 160, 50), SliderFill = Color3.fromRGB(255, 160, 50), GlowColor = Color3.fromRGB(255, 160, 50) 
+    }
+}
+
+ThemePage.AddDropdown("Select Theme", {"Cherry Noir (Valentines)", "Emerald Forest", "Oceanic Abyss", "Amethyst Dream", "Amber Sunset"}, function(choice)
+    local theme = Themes[choice]
+    for key, color in pairs(theme) do
+        MainUI.UpdateTheme(key, color)
+    end
+end)
+
+ThemePage.AddLabel("Manual Adjustments")
+ThemePage.AddColourPicker("Main Background", MainUI.GetThemeColor("MainBG"), function(v) MainUI.UpdateTheme("MainBG", v) end)
+ThemePage.AddColourPicker("Active Tab", MainUI.GetThemeColor("ActiveTab"), function(v) MainUI.UpdateTheme("ActiveTab", v) end)
+ThemePage.AddColourPicker("Text Color", MainUI.GetThemeColor("TextColor"), function(v) MainUI.UpdateTheme("TextColor", v) end)
+
+ThemePage.AddButton("Reset to Default", function()
+    for key, color in pairs(StartupTheme) do
+        MainUI.UpdateTheme(key, color)
+    end
+end)
+
+print("[MM2 Setup Complete] All modules successfully loaded.")
